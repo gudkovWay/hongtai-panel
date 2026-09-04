@@ -48,6 +48,8 @@ BAUD = 2_000_000  # Ignored by CDC-ACM, but matches the vendor app.
 
 USB_VID = 0x33C3
 USB_PID = 0x7791
+# 7792 is the same panel family with a newer/larger screen (e.g. 6.67" AMOLED).
+USB_PIDS = (0x7791, 0x7792)
 
 
 class Opcode:
@@ -342,7 +344,7 @@ def find_panel() -> str | None:
     from serial.tools import list_ports
 
     for p in list_ports.comports():
-        if p.vid == USB_VID and p.pid == USB_PID:
+        if p.vid == USB_VID and p.pid in USB_PIDS:
             return p.device
     for p in list_ports.comports():
         if "MONITOR" in (p.product or "").upper() or "HONGTAI" in (p.manufacturer or "").upper():
