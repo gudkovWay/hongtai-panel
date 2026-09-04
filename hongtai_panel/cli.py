@@ -240,9 +240,11 @@ def cmd_clear(args) -> int:
 UDEV_RULE = (
     '# HONGTAI / LOVINGCOOL USB serial LCD panel\n'
     'SUBSYSTEM=="tty", ATTRS{idVendor}=="33c3", ATTRS{idProduct}=="7791", '
-    'MODE="0660", GROUP="dialout", TAG+="uaccess", SYMLINK+="hongtai-panel"\n'
+    'MODE="0660", GROUP="uucp", TAG+="uaccess"\n'
+    'SUBSYSTEM=="tty", ATTRS{idVendor}=="33c3", ATTRS{idProduct}=="7792", '
+    'MODE="0660", GROUP="uucp", TAG+="uaccess"\n'
 )
-UDEV_PATH = Path("/etc/udev/rules.d/99-hongtai-panel.rules")
+UDEV_PATH = Path("/etc/udev/rules.d/70-hongtai-panel.rules")
 
 
 def root_prefix() -> list[str]:

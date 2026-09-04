@@ -1,4 +1,17 @@
-# HONGTAI / LOVINGCOOL USB serial LCD panel (AIO cooler display)
+# HONGTAI / LOVINGCOOL USB serial LCD panels (AIO pump head + case display)
 # TAG+="uaccess" hands the device to whoever is logged in at the seat, so no
 # group membership or re-login is needed.
-SUBSYSTEM=="tty", ATTRS{idVendor}=="33c3", ATTRS{idProduct}=="7791", MODE="0660", GROUP="dialout", TAG+="uaccess", SYMLINK+="hongtai-panel"
+#
+# The 70- prefix is load-bearing: systemd's 73-seat-late.rules is what actually
+# runs the uaccess builtin, so a rule numbered above 73 tags the device too late
+# and no ACL is ever granted.
+#
+# Both panels report the same serial number, so /dev/serial/by-id/ can only
+# name one of them. They differ by bcdDevice, which gives each a stable symlink
+# that survives ttyACM* renumbering across reboots.
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="33c3", ATTRS{idProduct}=="7791", MODE="0660", GROUP="uucp", TAG+="uaccess"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="33c3", ATTRS{idProduct}=="7792", MODE="0660", GROUP="uucp", TAG+="uaccess"
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="33c3", ATTRS{bcdDevice}=="0100", SYMLINK+="hongtai-0100"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="33c3", ATTRS{bcdDevice}=="0200", SYMLINK+="hongtai-0200"
